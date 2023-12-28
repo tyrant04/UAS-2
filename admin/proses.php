@@ -23,9 +23,15 @@ class Ship
         $this->harga = $harga;
         $this->gambar = $gambar;
     }
+
+    public function tampilInfo() {
+        return "Info Ship: Nama Kapal: " . $this->nama_kapal . ", Muatan: " . $this->muatan . ", Tujuan: " . $this->tujuan . ", Harga: " . $this->harga . "<br>";
+    }
+
+
 }
 
-class JadwalManager extends Ship
+class JadwalManager extends Ship //ini merupakan konsep oop untuk inheritance yang dimana class jadwalmanager ini merupakan kelas child dari class parent clas ship, hal ini ditandai dengan extands
 {
     public function tambahJadwal()
     {
@@ -74,6 +80,10 @@ class JadwalManager extends Ship
 
         return $sql;
     }
+
+    public function tampilInfo() {
+        return "Info Jadwal Manager: Nama Kapal: " . $this->nama_kapal . ", Muatan: " . $this->muatan . ", Tujuan: " . $this->tujuan . ", Harga: " . $this->harga . "<br>"; // ini pholimorpisme
+    }
 }
 
 $jadwalManager = new JadwalManager($conn);
@@ -87,12 +97,17 @@ if (isset($_POST['btnProses'])) {
 
     if ($_POST['btnProses'] == 'tambah') {
         $result = $jadwalManager->tambahJadwal();
+        $ship=new ship($conn);
+        
+        $hasil = $ship->tampilInfo("kapal besar","20","wakotobi","100rb");
     } else {
         $result = $jadwalManager->updateJadwal($_POST['id_kapal']);
+        $ship=new JadwalManager($conn);
+        $hasil = $ship->tampilInfo("kapal kecil","21","unaha","200rb");
     }
 
     if ($result) {
-        header("location:jadwal.php");
+        echo "<script>alert('$hasil'); window.location='jadwal.php';</script>";
     }
 } elseif (isset($_GET["hapus"])) {
     $result = $jadwalManager->hapusJadwal($_GET["hapus"]);
